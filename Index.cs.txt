@@ -1,0 +1,23 @@
+        public ActionResult Index()
+            {
+            var client = new HubSpotClient("bb23c39e-6585-4cf4-bae2-30c1be7dd07d");
+            client.Add(new Company
+                {
+                name = "Ajax Corp Inc.",
+                description = "Company description"
+                });
+            client.Add(new Contact
+                {
+                firstName = "Joe",
+                lastname = "Schmoe",
+                address = "123 No Street",
+                city = "Somecity",
+                state = "YourOwnState",
+                zip = "123456",
+                company = "Ajax Corp Inc.",
+                email = "joe@ajaxcorpinc.net",
+                phone = "(705) 555-1212",
+                website = "https://github.com/dmitrybakaev/hubspot-rest-client"
+                });
+            return View();
+            }
