@@ -1,0 +1,41 @@
+       public ActionResult PostContactToHubSpotAPI()
+            {
+            var posturl = "https://api.hubapi.com/contacts/v1/contact/createOrUpdate/email/"
+                + "BigJoeMontagne@aabb.com" + "?hapikey=bb23c39e-6585-4cf4-bae2-30c1be7dd07d";
+            Dictionary<string, string> inputvalues =
+                new Dictionary<string, string>();
+            inputvalues.Add("email", "BigJoeMontagne@aabb.com");
+            inputvalues.Add("firstname", "Joe");
+            inputvalues.Add("lastname", "Montagne");
+            inputvalues.Add("website", "");
+            inputvalues.Add("company", "Big Joe Enterprises");
+            inputvalues.Add("phone", "(705) 555-1212");
+            inputvalues.Add("address", "1 NotReal Street");
+            inputvalues.Add("city", "Appleton");
+            inputvalues.Add("state", "ON");
+            inputvalues.Add("country", "Canada");
+            inputvalues.Add("zip", "H0H1Zl");
+            StringBuilder jsonBody = new StringBuilder();
+            jsonBody.Append("{\"properties\":[");
+            foreach (var prop in inputvalues)
+                {
+                jsonBody.Append("{\"" + "property" + "\":\""
+                    + prop.Key + "\", \"value\":\""
+                    + (String.IsNullOrWhiteSpace(prop.Value)
+                    ? string.Empty : prop.Value) + "\"},");
+                }
+            jsonBody.Append("]}");
+            jsonBody.Replace(",]", "]");
+
+            byte[] byteArrayContent = Encoding.UTF8.GetBytes(jsonBody.ToString());
+            WebRequest request = WebRequest.Create(posturl);
+            ((HttpWebRequest)request).UserAgent = "HubSpot System Client";
+            request.Method = "POST";
+            request.ContentLength = byteArrayContent.Length;
+            request.ContentType = "application/json; charset=utf-8";
+            Stream dataStream = request.GetRequestStream();
+            dataStream.Write(byteArrayContent, 0, byteArrayContent.Length);
+            dataStream.Close();
+            WebResponse response = request.GetResponse();
+            return null;
+            }
